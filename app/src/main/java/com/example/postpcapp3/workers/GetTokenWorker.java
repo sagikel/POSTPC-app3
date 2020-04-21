@@ -1,0 +1,48 @@
+package com.example.postpcapp3.workers;
+
+import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.work.Data;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+import com.example.postpcapp3.RetrofitServerInterface;
+import com.example.postpcapp3.ServerSingleton;
+import com.example.postpcapp3.dataclass.TokenResponse;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+
+import retrofit2.Response;
+
+public class GetTokenWorker extends Worker {
+    public GetTokenWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+        RetrofitServerInterface retrofitServerInterface = ServerSingleton.getInstance().retrofitServerInterface;
+        String userName = getInputData().getString("UserName");
+
+        try {
+            Response<TokenResponse> response = retrofitServerInterface
+                    .getUsernameToken(userName).execute();
+
+            TokenResponse tokenResponse = response.body();
+            String toJson = new Gson().toJson(tokenResponse);
+
+            Data outputData = new Data.Builder()
+                    .putString("TokenResponse", toJson)
+                    .build();
+
+            return Result.success(outputData);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.retry();
+        }
+    }
+}

@@ -1,0 +1,27 @@
+
+As a client, at the first time you got a token. You have 2 options:
+a. save the token locally (for example in a file or in SP)
+b. use this token only in this current app-launch, and re-request a token from the server each time the app launches again.
+
+Write at least 1 pro and 1 con for each implementation (a) & (b):
+
+--------------------------------------------------------------------------
+**a**
+pro:
+- Less use of internet (no need to getting token from server).
+- Less burden on server.
+- Fast launch because getting local token is faster then getting from the server.
+
+con:
+- Not safe to keep the token locally - security issue.
+- Server can't update his tokens if he wants.
+
+**b**
+pro:
+- More secure - the hacker will need to hack the server for tokens.
+- server can update himself with more secure tokens if he want or if he need.
+
+con:
+- every time we will need to do step 1 - take more time then start with step 2.
+- more computation on server every launch.
+- More use of internet.
